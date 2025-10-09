@@ -1,4 +1,5 @@
 import ChatbotIcon from "../components/ChatbotIcon";
+import ChatForm from "../components/ChatForm";
 
 export default function Page() {
   return (
@@ -23,19 +24,13 @@ export default function Page() {
           </div>
           <div className="message user-message">
             <p className="message-text">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Doloremque, doloribus? Itaque, officiis
-              nesciunt modi expedita, recusandae maxime mollitia quasi.
+              Lorem, ipsum dolor sit amet consectetur adipisicing.
             </p>
           </div>
-
-          {/*  Chatbot footer */}
-          <div className="chat-footer"></div>
-          <form action="#" className="chat-form">
-            <input type= "text" placeholder="Responder..." className="messege-inpu" required></input>
-            <button className="material-symbols-outlined">keyboard_arrow_up</button>
-          </form>
-          
-
+        </div>
+        {/*  Chatbot footer */}
+        <div className="chat-footer">
+          <ChatForm />
         </div>
       </div>
     </div>
