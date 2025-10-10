@@ -1,0 +1,8 @@
+# Dockerfile para MySQL
+FROM mysql:8.1
+
+# Expone el puerto por defecto de MySQL
+EXPOSE 3306
+
+# Comando por defecto al iniciar el contenedor
+CMD ["mysqld"]

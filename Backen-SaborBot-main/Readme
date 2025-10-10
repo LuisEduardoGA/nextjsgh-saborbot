@@ -1,0 +1,13 @@
+##levantar DB local
+docker-compose up -d --build db
+
+##ejecutar api en local
+ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+
+##ejecutar migraciones
+alembic revision --autogenerate -m "cambio de tamano imagenes"
+alembic upgrade head
+
+
+docker compose up -d --build

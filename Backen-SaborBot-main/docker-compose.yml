@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  # --- 1. SERVICIO DE BASE DE DATOS (db) ---
+  db:
+    # Construye la imagen usando el Dockerfile.db que creaste
+    build: 
+      context: ./
+      dockerfile: Dockerfile.db
+    container_name: saborbot_db
+    restart: always
+    environment:
+      # Variables de entorno para la configuración inicial de MySQL
+      # Es crucial usar estas variables para que el backend pueda conectarse.
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD} 
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    
+    # Mantiene los datos persistentes
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+      
+    healthcheck: # Garantiza que la DB esté lista antes de que el backend se conecte
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # --- 2. SERVICIO DE BACKEND (backend) ---
+  backend:
+    # Construye la imagen usando tu Dockerfile.api
+    build: 
+      context: ./ 
+      dockerfile: Dockerfile.api
+    container_name: saborbot_backend
+    restart: on-failure
+    ports:
+      - "8000:8000" # Mapea el puerto 8000 del contenedor al puerto 8000 del host
+    environment:
+      # Configuración del entorno de la API
+      # ¡IMPORTANTE! DB_HOST es el nombre del servicio Docker Compose
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      # Aquí irían tus claves de AWS Bedrock si las usaras como ENV Vars
+      AWS_REGION: us-east-2 
+    
+    # Depende de que la DB esté completamente saludable
+    depends_on:
+      db:
+        condition: service_healthy 
+
+# --- DEFINICIÓN DE VOLÚMENES ---
+volumes:
+  db_data: # Volumen usado por el servicio 'db' para almacenar los datos
