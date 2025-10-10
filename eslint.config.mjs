@@ -10,7 +10,10 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
+  // Configuración base de Next + TypeScript
   ...compat.extends("next/core-web-vitals", "next/typescript"),
+
+  // Ignorar carpetas de build, node_modules, etc.
   {
     ignores: [
       "node_modules/**",
@@ -19,6 +22,13 @@ const eslintConfig = [
       "build/**",
       "next-env.d.ts",
     ],
+  },
+
+  // 👇 Aquí agregas tus reglas personalizadas
+  {
+    rules: {
+      "react/prop-types": "off",
+    },
   },
 ];
 
