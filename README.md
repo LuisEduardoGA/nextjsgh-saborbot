@@ -117,10 +117,10 @@ Flujo de trabajo en equipo (Git/GitHub)
 
 Antes de empezar cada día:
 
-git checkout main
-git pull origin main
+git checkout master
+git pull origin master
 git checkout tu-rama
-git merge main   # trae lo último a tu rama
+git merge master   # trae lo último a tu rama
 
 
 Durante el desarrollo:
